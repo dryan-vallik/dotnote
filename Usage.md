@@ -2,22 +2,24 @@
 
 ## Set default editor
 
-```
-\# ~/.config/.note/config.yaml
+```yaml
+# ~/.config/.note/config.yaml
 
-editing:
-    \#Change your default editor
-    editor: "nano"
+settings:
+    #Change your default editor
+    editor: nano
 ```
 
 ## Create a note
 ``` bash
-.note new
+.note new note_name
 ```
 
 ## Search notes
 ```bash
-.note search multiword query
+.note search multiword query # will match if any word is matched
+
+.note search -a multiword query # will match if all words match
 
 .note search -tc query # Time of creation ordered results (Most recent first)
 
