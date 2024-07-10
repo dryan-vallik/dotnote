@@ -5,7 +5,7 @@
 ```
 \# ~/.config/.note/config.yaml
 
-editing:
+settings:
     \#Change your default editor
     editor: "nano"
 ```
