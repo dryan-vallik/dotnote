@@ -1,19 +1,15 @@
 #ifndef H_CONFIGURATION
 #define H_CONFIGURATION
 
-
 #include <filesystem>
 #include <string>
+#include "Settings.hpp"
 
-struct Settings{
-    std::string editor = "nano";
-};
 
 class Configuration{
     public:
         // Builds the configuration
         Configuration();
-
         std::string getFileEditor();
 
     private:
