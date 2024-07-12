@@ -58,3 +58,24 @@ void CommandInterpreter::PrintUsage(){
     std::cout << USAGE_STR << std::endl;
     return;
 }
+
+void CommandInterpreter::ActionAddNote(const std::vector<std::string>& arguments){
+    std::cout << "Adding notes not implemented" << std::endl;
+}
+
+void CommandInterpreter::ActionRemoveNote(const std::vector<std::string>& arguments){
+    std::cout << "Removing notes not implemented" << std::endl;
+}
+
+void CommandInterpreter::ActionEditNote(const std::vector<std::string>& arguments){
+    std::cout << "Editing notes not implemented" << std::endl;
+}
+
+void CommandInterpreter::ActionNewNote(const std::vector<std::string>& arguments){
+    std::cout << "Creating notes not implemented" << std::endl;
+}
+
+void CommandInterpreter::ActionSearchNote(const std::vector<std::string>& arguments){
+    std::cout << "Searching notes not implemented" << std::endl;
+}
+
