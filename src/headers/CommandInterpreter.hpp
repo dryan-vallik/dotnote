@@ -1,6 +1,7 @@
 #ifndef H_COMMAND_INTERPRETER
 #define H_COMMAND_INTERPRETER
 
+#include <filesystem>
 #include <string>
 #include <vector>
 class CommandInterpreter{

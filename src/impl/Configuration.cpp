@@ -6,10 +6,12 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 
+namespace fs = std::filesystem;
+
 void YamlReadSettingsSection(YAML::Node yamlSettingsNode, Settings& settingsObject);
 
 Configuration::Configuration(){
-    std::filesystem::path configFile;
+    fs::path configFile;
     try{
         configFile = getStandardConfigFile();
     } catch (std::runtime_error& e){
@@ -17,19 +19,21 @@ Configuration::Configuration(){
         return; // Defaults are defined in class header
     }
 
-    if(not std::filesystem::exists(configFile)){
+    if(not fs::exists(configFile)){
         std::cerr << "Config file non existent. Using default configuration" << std::endl;
         return;
     }
 
     YAML::Node configYaml = YAML::LoadFile(configFile);
 
-    YamlReadSettingsSection(configYaml["settings"],this->settings);
-
+    YamlReadSettingsSection(configYaml["settings"],m_settings);
 }
 
 std::string Configuration::getFileEditor(){
-    return this->settings.editor;
+    return m_settings.editor;
+}
+fs::path Configuration::getRepoDirectory(){
+    return m_settings.repository;
 }
 
 void YamlReadSettingsSection(YAML::Node yamlSettingsNode, Settings& settingsObject){
@@ -44,22 +48,27 @@ void YamlReadSettingsSection(YAML::Node yamlSettingsNode, Settings& settingsObje
     else
         settingsObject.editor = yamlSettingsNode["editor"].as<std::string>();
 
+    if(not yamlSettingsNode["repository"])
+        std::clog << "  Using fallback repository: ~/.note.d/" << std::endl;
+    else
+        settingsObject.repository = yamlSettingsNode["repository"].as<std::string>();
 }
 
 // Looks for the configuration file in standard locations. Does not check the existence of the file
-std::filesystem::path Configuration::getStandardConfigFile(){
+fs::path Configuration::getStandardConfigFile(){
     const char* xdgConfigHome = std::getenv("XDG_CONFIG_HOME");
 
     if(xdgConfigHome){
-        return std::filesystem::path(xdgConfigHome) / "dotnote" / "config.yaml";
+        return fs::path(xdgConfigHome) / "dotnote" / "config.yaml";
     }
     // XDG_CONFIG_HOME not set
     const char* home = std::getenv("HOME");
 
     if(home)
-        return std::filesystem::path(home) / ".config" / "dotnote" / "config.yaml";
+        return fs::path(home) / ".config" / "dotnote" / "config.yaml";
     // HOME not set
 
     throw std::runtime_error("Couldn't locate config file, using default configuration");
 
 }
+

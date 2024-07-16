@@ -16,13 +16,13 @@ enum class AddingMethod{
 
 class RepoModifier{
 public:
-    explicit RepoModifier(const std::filesystem::path& repository_directory);
+    RepoModifier(const std::filesystem::path& repository_directory);
 
     // Creates a new note with the name specified
     std::filesystem::path NewNote(const std::string& name) const;
 
     // Edits the note with the name specified
-    std::filesystem::path EditNote(const std::string& name) const;
+    void EditNote(const std::string& name) const;
 
     // Removes the note with the name specified
     void RemoveNote(const std::string& name) const;

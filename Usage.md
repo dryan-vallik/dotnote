@@ -28,9 +28,9 @@ settings:
 
 ## Add existing note to repository
 ```bash
-.note add existing path/to/note.md # Will copy notes
+.note add path/to/note.md # Will copy notes
 
-.note add existing -l path/to/note.md # symlink notes
+.note add -l path/to/note.md # symlink notes
 ```
 
 ## Delete existing note in repository

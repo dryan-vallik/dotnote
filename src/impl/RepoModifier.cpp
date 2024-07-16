@@ -1,4 +1,8 @@
 #include "../headers/RepoModifier.hpp"
+#include "../headers/Configuration.hpp"
+#include <cstdlib>
+#include <stdexcept>
+#include <unistd.h>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
@@ -25,13 +29,30 @@ fs::path RepoModifier::NewNote(const std::string& name) const{
     return m_directory / name;
 }
 
-fs::path RepoModifier::EditNote(const std::string& name) const {
-    if(fs::exists(m_directory/name))
-        return m_directory/name;
+void RepoModifier::EditNote(const std::string& name) const {
+    if(not fs::exists(m_directory/name)){
+        std::cerr << ".note edit: Note doesn't exists." << std::endl;
+        throw std::runtime_error("Tried to edit non existing note");
+    }
 
-    std::cerr << ".note edit: Note doesn't exists." << std::endl;
+    Configuration config;
+    const std::string editor = config.getFileEditor();
 
-    return fs::path();
+    std::vector<char*> args;
+
+    args.push_back(
+            const_cast<char*>((m_directory/name).c_str()) // Note name
+    );
+
+    args.push_back(nullptr);
+
+    execv(editor.c_str(), args.data());
+
+    std::cerr   << ".note edit: Failed to execute editor. Make sure the editor in the configuration is valid.\n"
+                << "\tCommand attempted to execute: " << editor << ' ' << (m_directory/name).c_str() << std::endl;
+
+    throw std::runtime_error("execv failed. Bad configuration");
+
 }
 
 void RepoModifier::RemoveNote(const std::string& name) const {

@@ -11,10 +11,11 @@ class Configuration{
         // Builds the configuration
         Configuration();
         std::string getFileEditor();
+        std::filesystem::path getRepoDirectory();
 
     private:
         std::filesystem::path getStandardConfigFile();
-        Settings settings;
+        Settings m_settings;
         
 };
 
