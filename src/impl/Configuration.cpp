@@ -4,8 +4,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <yaml-cpp/node/node.h>
-#include <yaml-cpp/node/parse.h>
+#include <yaml-cpp/yaml.h>
 
 void YamlReadSettingsSection(YAML::Node yamlSettingsNode, Settings& settingsObject);
 
