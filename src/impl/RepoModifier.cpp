@@ -17,7 +17,7 @@ RepoModifier::RepoModifier(const fs::path& directory){
 }
 
 fs::path RepoModifier::NewNote(const std::string& name) const{
-    std::fstream new_note(m_directory / name);
+    std::ofstream new_note(m_directory / name);
 
     if(not new_note){
         std::cerr << ".note new: Unknown failure when creating the note, make sure you have write permision over the repository." << name << std::endl;
@@ -38,20 +38,12 @@ void RepoModifier::EditNote(const std::string& name) const {
     Configuration config;
     const std::string editor = config.getFileEditor();
 
-    std::vector<char*> args;
-
-    args.push_back(
-            const_cast<char*>((m_directory/name).c_str()) // Note name
-    );
-
-    args.push_back(nullptr);
-
-    execv(editor.c_str(), args.data());
+    execl(editor.c_str(), editor.c_str(), (m_directory/name).c_str(), NULL);
 
     std::cerr   << ".note edit: Failed to execute editor. Make sure the editor in the configuration is valid.\n"
                 << "\tCommand attempted to execute: " << editor << ' ' << (m_directory/name).c_str() << std::endl;
 
-    throw std::runtime_error("execv failed. Bad configuration");
+    throw std::runtime_error("execl failed. Bad configuration");
 
 }
 

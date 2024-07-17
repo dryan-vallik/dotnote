@@ -1,5 +1,6 @@
 CXX		=	g++
-CXXFLAGS=	-Wall -Werror
+CXXFLAGS=	-Wall -g
+
 
 LIBS	= 	yaml-cpp
 
