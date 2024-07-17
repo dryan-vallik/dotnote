@@ -1,7 +1,6 @@
 #ifndef H_COMMAND_INTERPRETER
 #define H_COMMAND_INTERPRETER
 
-#include <filesystem>
 #include <string>
 #include <vector>
 class CommandInterpreter{
@@ -14,6 +13,7 @@ private:
     static void ActionEditNote(const std::vector<std::string>& arguments);
     static void ActionAddNote(const std::vector<std::string>& arguments);
     static void PrintUsage();
+    static const unsigned char ReportError(const unsigned char& ERROR);
 };
 
 

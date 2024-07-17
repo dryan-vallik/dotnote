@@ -1,7 +1,7 @@
 #include "../headers/RepoModifier.hpp"
 #include "../headers/Configuration.hpp"
+#include "../headers/ERROR_CODES.hpp"
 #include <cstdlib>
-#include <stdexcept>
 #include <unistd.h>
 #include <ctime>
 #include <filesystem>
@@ -21,7 +21,7 @@ fs::path RepoModifier::NewNote(const std::string& name) const{
 
     if(not new_note){
         std::cerr << ".note new: Unknown failure when creating the note, make sure you have write permision over the repository." << name << std::endl;
-        return fs::path();
+        throw E_UNKNOWN;
     }
 
     new_note.close();
@@ -32,7 +32,7 @@ fs::path RepoModifier::NewNote(const std::string& name) const{
 void RepoModifier::EditNote(const std::string& name) const {
     if(not fs::exists(m_directory/name)){
         std::cerr << ".note edit: Note doesn't exists." << std::endl;
-        throw std::runtime_error("Tried to edit non existing note");
+        throw E_NOT_FOUND;
     }
 
     Configuration config;
@@ -43,30 +43,28 @@ void RepoModifier::EditNote(const std::string& name) const {
     std::cerr   << ".note edit: Failed to execute editor. Make sure the editor in the configuration is valid.\n"
                 << "\tCommand attempted to execute: " << editor << ' ' << (m_directory/name).c_str() << std::endl;
 
-    throw std::runtime_error("execl failed. Bad configuration");
+    throw E_BAD_CONFIG;
 
 }
 
 void RepoModifier::RemoveNote(const std::string& name) const {
     if(not fs::remove(m_directory/name)){
-        std::cout << ".note rm: Note doesn't exist." << std::endl;
+        throw E_NOT_FOUND;
     }
 }
 
 void RepoModifier::RemoveNote(std::time_t maximum_creation_date) const {
-    std::cerr << ".note rm: Removing based on time is not implemented yet." << std::endl;
+    throw E_NOT_IMPLEMENTED;
 }
 
 fs::path RepoModifier::AddNote(const std::filesystem::path& location, AddingMethod adding_method) const {
 
     if(not fs::exists(location)){
-        std::cerr << ".note add: Couldn't find any note in " << location.string() << std::endl;
-        return fs::path();
+        throw E_NOT_FOUND;
     }
 
     if(not fs::is_regular_file(location)){
-        std::cerr << ".note add: File in " << location.string() << " is not a regular file." << std::endl;
-        return fs::path();
+        throw E_BAD_FILE;
     }
 
     const auto note_location = m_directory / location.filename();
@@ -125,6 +123,3 @@ std::vector<fs::path> RepoModifier::SearchNotes(const std::string& query) const{
     }
     return results;
 }
-
-
-
